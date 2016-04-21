@@ -1,4 +1,2 @@
 # hello-world
 project
-
-zapełniacz
