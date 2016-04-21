@@ -1,0 +1,66 @@
+#include<iostream>
+#include<algorithm>
+#include<cmath>
+#include<vector>
+using namespace std;
+int n;
+long long det;
+long long Pole;
+struct A
+{
+      long long x;
+      long long y;
+};
+vector<A> V;
+long long gcd(long long a,long long b)
+{
+      if(b>a) swap(a, b);
+    if (b==0) return a;
+    else return gcd(b, a%b);
+}
+void wczytaj()
+{
+      cin>>n;
+      V.clear();
+      for(int i=0;i<n;i++)
+      {
+              A wsp;
+              cin>>wsp.x>>wsp.y;
+              V.push_back(wsp);
+      }
+      A wsp;
+      wsp.x=V[0].x;
+      wsp.y=V[0].y;
+      V.push_back(wsp);
+}
+void program()
+{
+      Pole=0;
+      for(int i=0;i<n;i++)
+      {
+              det=(V[i].x*V[i+1].y)-(V[i].y*V[i+1].x);
+              Pole+=det;
+      }
+      if(Pole<0)Pole*=-1;
+      for(int i=0;i<n;i++)
+      {
+              long long x=V[i].x-V[i+1].x;
+              if(x<0) x*=-1;
+              long long y=V[i].y-V[i+1].y;
+              if(y<0) y*=-1;
+              Pole-=gcd(x,y);
+      }
+      Pole+=2;
+      cout<<Pole/2<<endl;
+}
+int main()
+{
+      ios_base::sync_with_stdio(0);
+      int z;
+      cin>>z;
+      for(int ile=0;ile<z;ile++)
+      {
+              wczytaj();
+              program();
+      }
+}

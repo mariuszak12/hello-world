@@ -1,0 +1,75 @@
+#include<iostream>
+#include<algorithm>
+#include<cmath>
+#include<vector>
+using namespace std;
+int n;
+struct A
+{
+      long long x;
+      long long y;
+      long long z;
+};
+vector<A> V;
+void wczytaj()
+{
+      cin>>n;
+      V.clear();
+      for(int i=0;i<n;i++)
+      {
+              A wsp;
+              cin>>wsp.x>>wsp.y>>wsp.z;
+              V.push_back(wsp);
+      }
+}
+void program()
+{
+      A w;
+      int q=3,tk=0;
+      long long x1,x2,y1,y2,z1,z2,il;
+      x1=V[1].x-V[0].x;
+      y1=V[1].y-V[0].y;
+      z1=V[1].z-V[0].z;
+      x2=V[2].x-V[0].x;
+      y2=V[2].y-V[0].y;
+      z2=V[2].z-V[0].z;
+      w.x=(y1*z2)-(y2*z1);
+      w.y=(z1*x2)-(z2*x1);
+      w.z=(x1*y2)-(x2*y1);
+      if(w.x==0 && w.y==0 && w.z==0)
+      {
+              while((w.x==0 && w.y==0 && w.z==0) && q<n)
+              {
+                      x2=V[q].x-V[0].x;
+                      y2=V[q].y-V[0].y;
+                      z2=V[q].z-V[0].z;
+                      w.x=(y1*z2)-(y2*z1);
+                      w.y=(z1*x2)-(z2*x1);
+                      w.z=(x1*y2)-(x2*y1);
+                      q++;
+              }
+      }
+      for(int i=q;i<n;i++)
+      {
+              il=(w.x*(V[i].x-V[0].x))+(w.y*(V[i].y-V[0].y))+(w.z*(V[i].z-V[0].z));
+              if(il!=0)
+              {
+                      tk=1;
+                      break;
+              }
+      }
+      if(tk==0) cout<<"TAK"<<endl;
+      else cout<<"NIE"<<endl;
+}
+int main()
+{
+      ios_base::sync_with_stdio(0);
+      int z;
+      cin>>z;
+      for(int ile=0;ile<z;ile++)
+      {
+              wczytaj();
+              if(n<=3)cout<<"TAK"<<endl;
+              else program();
+      }
+}

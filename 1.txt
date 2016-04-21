@@ -1,0 +1,89 @@
+#include <iostream>
+#include <set>
+#include <algorithm>
+#include <queue>
+using namespace std;
+int n;
+long long dl;
+struct wsp
+{
+    int x;
+    int y;
+    int rodzaj;
+    int numer;
+};
+wsp tab[100005];
+set <wsp> S;
+queue <int> Q;
+bool srt(wsp X, wsp Y)
+{
+    if(X.x==Y.x) return(X.rodzaj>Y.rodzaj);
+    return (X.x<Y.x);
+}
+bool operator<(wsp X, wsp Y)
+{
+    if(X.y==Y.y) return(X.x>Y.x);
+    return(X.y<Y.y);
+}
+void wczytaj()
+{
+    cin>>n;
+    dl=0;
+    for(int i=1;i<=n;i++)
+    {
+        wsp Pk;
+        cin>>Pk.x>>Pk.y;
+        dl+=Pk.x-Pk.y;
+        Pk.rodzaj=1;
+        Pk.numer=i;
+        tab[i-1]=Pk;
+    }
+    for (int i=1;i<=n;i++)
+    {
+        wsp Pk;
+        cin>>Pk.x>>Pk.y;
+        dl+=Pk.y-Pk.x;
+        Pk.rodzaj=0;
+        Pk.numer=i;
+        tab[i+n-1]=Pk;
+    }
+    sort(tab, tab+2*n, srt);
+    if(dl<0) dl*=(-1);
+    cout<<dl<<endl;
+}
+void program()
+{
+    for (int i=0;i<2*n;i++)
+    {
+        if (tab[i].rodzaj==1)
+        {
+            S.insert(tab[i]);
+        }
+        else
+        {
+            set<wsp>::iterator j=S.lower_bound(tab[i]);
+            wsp W=*j;
+            Q.push(W.numer);
+            Q.push(tab[i].numer);
+            S.erase(W);
+        }
+    }
+    for (int i=0;i<n;i++)
+    {
+        cout<<Q.front()<<" ";
+        Q.pop();
+        cout<<Q.front()<<endl;
+        Q.pop();
+    }
+}
+int main()
+{
+    int z;
+    cin>>z;
+    for(int ile=0;ile<z;ile++)
+    {
+        wczytaj();
+        program();
+    }
+    return 0;
+}

@@ -1,0 +1,99 @@
+#include<iostream>
+#include<algorithm>
+#include<cmath>
+#include<vector>
+using namespace std;
+int n,najw=0;
+long double R;
+long double alfa,beta;
+struct A
+{
+      long long x;
+      long long y;
+};
+struct T
+{
+      long double a;
+      int b;
+};
+vector<A> V;
+vector<T> W;
+bool srt(T X, T Y)
+{
+    return(X.a<Y.a);
+}
+void wczytaj()
+{
+      cin>>n>>R;
+      R+=1e-8;
+      V.clear();
+      for(int i=0;i<n;i++)
+      {
+              A wsp;
+              cin>>wsp.x>>wsp.y;
+              V.push_back(wsp);
+      }
+}
+void program()
+{
+      for(int i=0;i<n;i++)
+      {
+              for(int j=0;j<n;j++)
+              {
+                      if(j!=i)
+                      {
+                              long double r=4*R*R;
+                              int x=V[j].x-V[i].x;
+                              int y=V[j].y-V[i].y;
+                              long long od=x*x+y*y;
+                              if(od<=r)
+                              {
+                                  long double xx=sqrt(od), rr=2*R;
+                                      alfa=atan2(y,x);
+                                      beta=acos(xx/rr);
+                                      long double p=alfa-beta;
+                                      long double q=alfa+beta;
+                                      T E,F;
+                                      E.a=p;E.b=0;
+                                      F.a=q;F.b=1;
+                                      W.push_back(E);
+                                      W.push_back(F);
+                                      p+=M_PI*2;
+                                      q+=M_PI*2;
+                                      E.a=p;E.b=0;
+                                      F.a=q;F.b=1;
+                                      W.push_back(E);
+                                      W.push_back(F);
+                              }
+                      }
+              }
+              sort(W.begin(),W.end(),srt);
+              int aa=0;
+              for(int j=0;j<W.size();j++)
+        {
+            //cout<<W[j].a<<" "<<W[j].b<<endl;
+            if(W[j].b==0) aa++;
+            else
+            {
+                if(aa>najw)najw=aa;
+                aa--;
+            }
+        }
+        //cout<<endl;
+              W.clear();
+      }
+      cout<<najw+1<<endl;
+      najw=0;
+}
+int main()
+{
+      ios_base::sync_with_stdio(0);
+      cout.setf(ios::fixed);
+      int z;
+      cin>>z;
+      for(int ile=0;ile<z;ile++)
+      {
+              wczytaj();
+              program();
+      }
+}

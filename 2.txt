@@ -1,0 +1,60 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+int n;
+long long wynik;
+struct wsp
+{
+    int x;
+    int y;
+    int il;
+};
+vector<wsp> V;
+void wczytaj()
+{
+    wynik=0;
+    cin>>n;
+    for(int i=0;i<n;i++)
+    {
+        wsp pk;
+        cin>>pk.x>>pk.y>>pk.il;
+        if(pk.x==0 || pk.y==0)wynik+=pk.il;
+        pk.x-=1;
+        pk.y-=1;
+        V.push_back(pk);
+    }
+}
+void program()
+{
+    if(wynik!=0)cout<<wynik<<endl;
+    else
+    {
+        int a=0;
+        for (int i=0;i<n;i++)
+        {
+            if (V[i].il%2!=0)
+            {
+                a=a^V[i].x;
+                a=a^V[i].y;
+            }
+        }
+        for (int i=0;i<n;i++)
+        {
+            if(V[i].x>(a^V[i].x)) wynik+=V[i].il;
+            if(V[i].y>(a^V[i].y)) wynik+=V[i].il;
+        }
+        cout<<wynik<<endl;
+    }
+    V.clear();
+}
+int main()
+{
+    int z;
+    cin>>z;
+    for(int ile=0;ile<z;ile++)
+    {
+        wczytaj();
+        program();
+    }
+    return 0;
+}

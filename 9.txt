@@ -1,0 +1,165 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+int w,h,p,n,m;
+int A[1001][1001];
+long long C[1001][1001];
+int B[1001][1001];
+int E[1001][1001];
+struct D
+{
+      int x;
+      int y;
+      int zn;
+};
+vector<D> V;
+long long sum;
+long long wynik;
+long long szybpot(int a,int b,int c)
+{
+      if(b==0) return 1;
+      else
+      {
+              long long q=szybpot(a,b/2,c);
+              q*=q;
+              q%=c;
+              if(b%2==1){q*=a; q%=c;}
+              return q;
+      }
+}
+void czysc()
+{
+      for(int i=0;i<h;i++)
+      {
+              for(int j=0;j<w;j++)
+              {
+                      B[i][j]=A[i][j]=C[i][j]=0;
+              }
+      }
+}
+void liczpol()
+{
+      C[0][0]=A[0][0];
+      E[0][0]=B[0][0];
+      for(int i=1;i<h;i++)
+      {
+              C[i][0]=C[i-1][0]*A[i][0];
+              C[i][0]%=p;
+              E[i][0]=E[i-1][0]+B[i][0];
+      }
+      for(int i=1;i<w;i++)
+      {
+              C[0][i]=C[0][i-1]*A[0][i];
+              C[0][i]%=p;
+              E[0][i]=E[0][i-1]+B[0][i];
+      }
+      for(int i=1;i<h;i++)
+      {
+              long long u=A[i][0];
+              for(int j=1;j<w;j++)
+              {
+                      C[i][j]=A[i][j]*u;
+                      C[i][j]%=p;
+                      u*=A[i][j];
+                      u%=p;
+                      C[i][j]*=C[i-1][j];
+                      C[i][j]%=p;
+                      E[i][j]=B[i][j]+E[i-1][j]+E[i][j-1]-E[i-1][j-1];
+              }
+      }
+      /*for(int i=0;i<h;i++)
+      {
+              for(int j=0;j<w;j++)cout<<C[i][j]<<" ";
+              cout<<endl;
+      }*/
+}
+void suma()
+{
+      int s=V.size();
+      sum=0;
+      for(int j=0;j<s;j++)
+      {
+              int b=V[j].x;
+              int a=V[j].y;
+              if(a!=0 && b!=0)
+              {
+                      if(V[j].zn==1)
+                      {
+                              sum+=E[a-1][b-1];
+                      }
+                      else
+                      {
+                              sum-=E[a-1][b-1];
+                      }
+              }
+      }
+}
+void mnoz()
+{
+      int s=V.size();
+      for(int j=0;j<s;j++)
+      {
+              int b=V[j].x;
+              int a=V[j].y;
+              if(a!=0 && b!=0)
+              {
+                      int k=C[a-1][b-1];
+                      if(V[j].zn==1)
+                      {
+                              wynik*=k;
+                              wynik%=p;
+                      }
+                      else
+                      {
+                              wynik*=szybpot(k,p-2,p);
+                              wynik%=p;
+                      }
+              }
+      }
+}
+void program()
+{
+      suma();
+      if(sum!=0){wynik=0;}
+      else {wynik=1;mnoz();}
+      cout<<wynik<<endl;
+}
+void wczytaj()
+{
+      cin>>w>>h>>p;
+      czysc();
+      for(int i=0;i<h;i++)
+      {
+              for(int j=0;j<w;j++)
+              {
+                      cin>>A[i][j];
+                      if(A[i][j]==0) B[i][j]=A[i][j]=1;
+              }
+      }
+      liczpol();
+      cin>>n;
+      for(int i=0;i<n;i++)
+      {
+              V.clear();
+              cin>>m;
+              for(int j=0;j<m;j++)
+              {
+                      D v;
+                      cin>>v.x>>v.y;v.zn=0;
+                      V.push_back(v);
+              }
+              if(V[0].x==V[m-1].x)V[0].zn=1;
+              for(int j=1;j<m;j++)if(V[j].x==V[j-1].x)V[j].zn=1;
+              program();
+      }
+}
+int main()
+{
+      ios_base::sync_with_stdio(0);
+      int z;
+      cin>>z;
+      for(int ile=0;ile<z;ile++)
+      {
+              wczytaj();
+      }
+}

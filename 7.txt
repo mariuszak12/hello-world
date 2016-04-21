@@ -1,0 +1,124 @@
+#include<iostream>
+#include<algorithm>
+#include<cmath>
+#include<vector>
+#include<stack>
+#include<iomanip>
+using namespace std;
+int n,R;
+struct A
+{
+      int x;
+      int y;
+};
+stack<A> Otoczka;
+stack<A> Otoczka2;
+stack<A> Ot;
+A tab[200001];
+bool operator< (A X, A Y)
+{
+      if(X.x==Y.x)return(X.y>Y.y);
+      return(X.x<Y.x);
+}
+void wczytaj()
+{
+      cin>>n>>R;
+      for(int i=0;i<n;i++)
+      {
+              cin>>tab[i].x>>tab[i].y;
+      }
+      sort(tab, tab+n);
+}
+void program()
+{
+      Otoczka.push(tab[0]);
+      Otoczka.push(tab[1]);
+      int w=2;
+      for(int i=2;i<n;i++)
+      {
+              A K1;
+              K1.x=tab[i].x;
+              K1.y=tab[i].y;
+              A K2=Otoczka.top();
+              Otoczka.pop();
+              long long det=((K1.x-K2.x)*(K2.y-Otoczka.top().y))-((K1.y-K2.y)*(K2.x-Otoczka.top().x));
+              while(det>0 && w>2)
+              {
+                      K2=Otoczka.top();
+                      Otoczka.pop();
+                      w--;
+                      det=((K1.x-K2.x)*(K2.y-Otoczka.top().y))-((K1.y-K2.y)*(K2.x-Otoczka.top().x));
+              }
+              //if(det<=0 && w==2) w--;
+              //else
+              Otoczka.push(K2);
+              if(det<=0)
+              {
+                      Otoczka.push(K1);
+                      w++;
+              }
+      }
+      Otoczka2.push(tab[n-1]);
+      Otoczka2.push(tab[n-2]);
+      int w2=2;
+      for(int i=n-3;i>=0;i--)
+      {
+              A K1;
+              K1.x=tab[i].x;
+              K1.y=tab[i].y;
+              A K2=Otoczka2.top();
+              Otoczka2.pop();
+              long long det=((K1.x-K2.x)*(K2.y-Otoczka2.top().y))-((K1.y-K2.y)*(K2.x-Otoczka2.top().x));
+              while(det>0 && w2>2)
+              {
+                      K2=Otoczka2.top();
+                      Otoczka2.pop();
+                      w2--;
+                      det=((K1.x-K2.x)*(K2.y-Otoczka2.top().y))-((K1.y-K2.y)*(K2.x-Otoczka2.top().x));
+              }
+              //if(det<=0 && w2==2) w2--;
+              //else
+              Otoczka2.push(K2);
+              if(det<=0)
+              {
+                      Otoczka2.push(K1);
+                      w2++;
+              }
+      }
+      A K=Otoczka2.top();
+      for(int i=0;i<w2;i++)
+      {
+              Ot.push(Otoczka2.top());
+              Otoczka2.pop();
+      }
+      for(int i=0;i<w;i++)
+      {
+              Ot.push(Otoczka.top());
+              Otoczka.pop();
+      }
+      Ot.push(K);
+      long double aaa=2*M_PI*R;
+      for(int i=0;i<w+w2;i++)
+      {
+              A Q=Ot.top();
+              Ot.pop();
+              A P=Ot.top();
+              int x=Q.x-P.x;
+              int y=Q.y-P.y;
+              aaa+=sqrt((x*x)+(y*y));
+      }
+      cout<<aaa<<endl;
+}
+int main()
+{
+      ios_base::sync_with_stdio(0);
+      //cout.setf(ios::fixed);
+      int z;
+      cin>>z;
+      cout.precision(15);
+      for(int ile=0;ile<z;ile++)
+      {
+              wczytaj();
+              program();
+      }
+}
