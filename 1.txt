@@ -11,7 +11,7 @@ struct wsp
     int y;
     int rodzaj;
     int numer;
-};
+};//
 wsp tab[100005];
 set <wsp> S;
 queue <int> Q;
